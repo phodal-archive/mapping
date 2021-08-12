@@ -49,29 +49,43 @@ var chart = function (data) {
         .join("line")
         .attr("stroke-width", d => Math.sqrt(d.value));
 
+    const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
+
     const node = svg.append("g")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1.5)
-        .selectAll("circle")
+        .attr("fill", "currentColor")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round")
+        .selectAll("g")
         .data(nodes)
-        .join("circle")
-        .attr("r", 5)
-        .attr("fill", color())
+        .join("g")
         .call(drag(simulation));
 
-    node.append("title")
-        .text(d => d.id);
+    node.append("circle")
+        .attr("stroke", "white")
+        .attr("stroke-width", 1.5)
+        .attr("r", 5)
+        .attr('fill', color());
+
+    node.append("text")
+        .attr("x", 30 + 4)
+        .attr("y", "0.31em")
+        .text(d => d.id)
+        .clone(true).lower()
+        .attr("fill", "none")
+        .attr("stroke", "white")
+        .attr("stroke-width", 3);
+
+    node.on('dblclick', (e, d) => console.log(nodes[d.index]))
 
     simulation.on("tick", () => {
+        // link.attr("d", linkArc);
         link
             .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
 
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
+        node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
 
     // invalidation.then(() => simulation.stop());
