@@ -41,7 +41,8 @@ var chart = function (data) {
     const svg = d3.select("svg")
         .attr("viewBox", [0, 0, width, height]);
 
-    const link = svg.append("g")
+    let g = svg.append("g");
+    const link = g
         .attr("stroke", "#999")
         .attr("stroke-opacity", 0.6)
         .selectAll("line")
@@ -49,9 +50,16 @@ var chart = function (data) {
         .join("line")
         .attr("stroke-width", d => Math.sqrt(d.value));
 
-    const linkArc = d =>`M${d.source.x},${d.source.y}A0,0 0 0,1 ${d.target.x},${d.target.y}`
+    function zoomed({transform}) {
+        g.attr("transform", transform);
+    }
 
-    const node = svg.append("g")
+    svg.call(d3.zoom()
+        .extent([[0, 0], [width, height]])
+        .scaleExtent([1, 8])
+        .on("zoom", zoomed));
+
+    const node = g
         .attr("fill", "currentColor")
         .attr("stroke-linecap", "round")
         .attr("stroke-linejoin", "round")
