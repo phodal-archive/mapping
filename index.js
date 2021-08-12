@@ -79,6 +79,42 @@ var chart = function (data) {
     return svg.node();
 }
 
-d3.json("/data/miserables.json").then(data => {
-    let node = chart(data);
+d3.csv("/data/sponsee.csv").then(data => {
+    let sponsors = {}
+    let links = [];
+    let nodes = [];
+    let nodes_map = {}
+
+    for (let item of data) {
+        let sponseeName = item["Sponsee"];
+        let sponsorName = item["Sponsor"];
+
+        nodes_map[sponseeName] = 1;
+        nodes_map[sponsorName] = 1;
+
+        if(sponsors[sponsorName]) {
+            sponsors[sponsorName]++
+        } else {
+            sponsors[sponsorName] = 1
+        }
+        links.push({
+            source: sponseeName,
+            target: sponsorName,
+            value: 1
+        })
+    }
+
+    for (let sponsor in nodes_map) {
+        nodes.push({
+            id: sponsor,
+            group: sponsors[sponsor]
+        })
+    }
+
+    console.log(nodes, links)
+
+    chart({
+        nodes,
+        links
+    });
 });
