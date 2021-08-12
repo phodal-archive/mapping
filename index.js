@@ -56,7 +56,7 @@ var chart = function (data) {
         .data(nodes)
         .join("circle")
         .attr("r", 5)
-        .attr("fill", color)
+        .attr("fill", color())
         .call(drag(simulation));
 
     node.append("title")
