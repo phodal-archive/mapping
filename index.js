@@ -56,7 +56,7 @@ var chart = function (data) {
 
     svg.call(d3.zoom()
         .extent([[0, 0], [width, height]])
-        .scaleExtent([1, 8])
+        .scaleExtent([1/8, 64])
         .on("zoom", zoomed));
 
     const node = g
