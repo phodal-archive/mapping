@@ -71,7 +71,13 @@ var chart = function (data) {
     node.append("circle")
         .attr("stroke", "white")
         .attr("stroke-width", 1.5)
-        .attr("r", 5)
+        .attr("r", d => {
+            let sponsees = d.group;
+            if (sponsees > 5) {
+                return sponsees;
+            }
+            return 5
+        })
         .attr('fill', color());
 
     node.append("text")
@@ -80,7 +86,12 @@ var chart = function (data) {
         .text(d => d.id)
         .clone(true).lower()
         .attr("fill", "none")
-        .attr("stroke", "white")
+        .attr("stroke", d => {
+            if (d.group) {
+                return "red"
+            }
+            return "white"
+        })
         .attr("stroke-width", 3);
 
     node.on('dblclick', (e, d) => console.log(nodes[d.index]))
