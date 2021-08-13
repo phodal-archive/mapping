@@ -114,6 +114,10 @@ d3.csv("/data/sponsee.csv").then(data => {
         nodes_map[sponseeName] = 1;
         nodes_map[sponsorName] = 1;
 
+        if(sponsorName === "") {
+            continue;
+        }
+
         if(sponsors[sponsorName]) {
             sponsors[sponsorName]++
         } else {
@@ -132,8 +136,6 @@ d3.csv("/data/sponsee.csv").then(data => {
             group: sponsors[sponsor]
         })
     }
-
-    console.log(nodes, links)
 
     chart({
         nodes,
